@@ -1,0 +1,54 @@
+{
+  "name": "wrapper-aggrid-genre",
+  "version": "2.0.8",
+  "description": "A common react typescript ag grid library",
+  "scripts": {
+    "rollup": "rollup -c --bundleConfigAsCjs",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
+  },
+  "author": "hanasir",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/saadreact/commonreactggrid"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.12",
+    "@rollup/plugin-commonjs": "^24.0.1",
+    "@rollup/plugin-node-resolve": "^15.0.1",
+    "@rollup/plugin-typescript": "^11.0.0",
+    "@types/react": "^18.0.27",
+    "babel-loader": "^8.3.0",
+    "postcss": "^8.4.21",
+    "rollup": "^3.17.3",
+    "rollup-plugin-dts": "^5.2.0",
+    "rollup-plugin-postcss": "^4.0.2",
+    "tslib": "^2.5.0",
+    "typescript": "^4.9.4"
+  },
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "dependencies": {
+    "@mui/material": "^5.11.12",
+    "@rollup/plugin-json": "^6.0.0",
+    "@types/styled-components": "^5.1.26",
+    "ag-grid-community": "^29.1.0",
+    "ag-grid-react": "^29.1.0",
+    "axios": "^1.3.4",
+    "rollup-plugin-import-css": "^3.1.0",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-sass": "^1.12.17",
+    "rollup-plugin-scss": "^4.0.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "styled-components": "^5.3.8"
+  }
+}
