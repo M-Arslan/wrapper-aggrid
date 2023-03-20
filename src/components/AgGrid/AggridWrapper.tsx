@@ -33,6 +33,16 @@ function AggridWrapper(props:AggridWrapperProps)  {
     setOpen(false);
 }
 
+ const modifyColumnDefs = () => {
+   
+ }
+
+ React.useEffect(() => {
+    
+     modifyColumnDefs();
+
+ },[]);
+
 
   return (
     <ClaimLandingContainer>
@@ -54,7 +64,7 @@ function AggridWrapper(props:AggridWrapperProps)  {
           </HeaderSwitchToolbar>
       </ClaimLandingToolbar>
       <ClaimLandingHeader>
-          <GridContainer className="ag-theme-alpine">
+          <GridContainer className="ag-theme-alpine" style={{width:'100%',height:'500px'}}>
               <AgGridReact
                   defaultColDef={defaultColDef}
                   columnDefs={columnDefs}

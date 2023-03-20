@@ -1,6 +1,6 @@
 {
   "name": "wrapper-aggrid-genre",
-  "version": "2.0.8",
+  "version": "1.0.1",
   "description": "A common react typescript ag grid library",
   "scripts": {
     "rollup": "rollup -c --bundleConfigAsCjs",
@@ -38,7 +38,10 @@
     "react-dom": "^18.2.0"
   },
   "dependencies": {
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
     "@mui/material": "^5.11.12",
+    "@rollup/plugin-image": "^3.0.2",
     "@rollup/plugin-json": "^6.0.0",
     "@types/styled-components": "^5.1.26",
     "ag-grid-community": "^29.1.0",
