@@ -5,7 +5,8 @@ import { ClaimLandingContainer,ClaimLandingHeader, ClaimLandingToolbar, Toolbutt
 import { IconButton, Switch, FormControl, FormGroup, FormControlLabel } from '@mui/material';
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
-
+import {Menu} from "@mui/icons-material"
+import { CustomDrawer } from './CustomDrawer';
 
 type ColDefProp = {
   field: string,
@@ -119,6 +120,7 @@ function AggridWrapper(props:AggridWrapperProps)  {
 
   return (
     <ClaimLandingContainer>
+        <CustomDrawer open={open} setOpen={setOpen} />
       <ClaimLandingToolbar>
           <Toolbuttons>
                   <IconButton name="new" title="New Claim" >
@@ -132,12 +134,12 @@ function AggridWrapper(props:AggridWrapperProps)  {
                   aria-label="open drawer"
                   onClick={handleDrawerOpen}
               >  
-                  
+                  <Menu />
               </IconButton>
           </HeaderSwitchToolbar>
       </ClaimLandingToolbar>
       <ClaimLandingHeader>
-          <GridContainer className="ag-theme-alpine" style={{width:'100%',height:'500px'}}>
+          <GridContainer className="ag-theme-alpine" style={{width:'1200px',height:'500px'}}>
               <AgGridReact
                   defaultColDef={defaultColDef}
                   columnDefs={colDefs}
