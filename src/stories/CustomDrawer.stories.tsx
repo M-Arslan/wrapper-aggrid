@@ -1,14 +1,14 @@
 import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import {CustomDrawer} from "../components/AgGrid/CustomDrawer";
+import {CustomAgGridViews} from "../components/AgGrid/Views/CustomAgGridViews";
 
 export default {
-	title: "Ag-Grid/CusromDrawer",
-	component: CustomDrawer,
+	title: "Ag-Grid/CustomAgGridViews",
+	component: CustomAgGridViews,
 	argTypes: {},
-} as ComponentMeta<typeof CustomDrawer>;
+} as ComponentMeta<typeof CustomAgGridViews>;
 
-const Template: ComponentStory<typeof CustomDrawer> = (args) => <CustomDrawer {...args} />;
+const Template: ComponentStory<typeof CustomAgGridViews> = (args) => <CustomAgGridViews {...args} />;
 
 export const Primary = Template.bind({});
 Primary.args = {

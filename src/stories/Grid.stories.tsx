@@ -1,7 +1,7 @@
 import React from "react";
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import AggridWrapper from "../components/AgGrid/AggridWrapper";
-import DataJson from "../Data.json";
+import AggridWrapper from "../components/AgGrid/AggirdWrapperComp/AggridWrapper";
+
 export default {
   title: "Ag-Grid/Grid",
   component: AggridWrapper,
@@ -13,9 +13,9 @@ const Template: ComponentStory<typeof AggridWrapper> = (args) => (
 );
 
 export const Primary = Template.bind({});
+
 Primary.args = {
-  rowData: DataJson,
-  columnDefs: [
+  columnDefs:  [
     { field: "athlete", type: "text" },
     { field: "sport", type: "text" },
     {
@@ -28,4 +28,5 @@ Primary.args = {
     { field: "date", type: "date", width: 220 },
   ],
   dashboardName: "test",
+  apiURL:'https://www.ag-grid.com/example-assets/olympic-winners.json'
 };
