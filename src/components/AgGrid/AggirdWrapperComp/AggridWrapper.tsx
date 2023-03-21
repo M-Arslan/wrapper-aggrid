@@ -1,40 +1,25 @@
 import React, { useState ,useMemo} from 'react';
 import { AgGridReact } from 'ag-grid-react';
 import { ColDef, ColDefUtil } from "ag-grid-community";
-import { ClaimLandingContainer,ClaimLandingHeader, ClaimLandingToolbar, Toolbuttons,Title ,HeaderSwitchToolbar, GridContainer} from '../Styles/Styles';
+import { ClaimLandingContainer,ClaimLandingHeader, ClaimLandingToolbar, Toolbuttons,Title ,HeaderSwitchToolbar, GridContainer} from '../../Styles/Styles';
 import { IconButton, Switch, FormControl, FormGroup, FormControlLabel } from '@mui/material';
+import 'ag-grid-enterprise';
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import {Menu} from "@mui/icons-material"
-import { CustomDrawer } from './CustomDrawer';
+import { CustomAgGridViews } from '../Views/CustomAgGridViews';
+import { AggridWrapperProps, ColumnsDefinitions } from './AggridWrapperUtils';
 
-type ColDefProp = {
-  field: string,
-  type:string,
-  filterParams?: any,
-  width: Number
-}
-interface AggridWrapperProps {
-    columnDefs: ColDefProp[];
-    rowData:  any[];
-    dashboardName: string
-}
-
-
-interface ColumnsDefinitions {
-  id : any,
-  name:string,
-  field:string,
-  filter:string|null,
-  filterParams: any[]|null,
-  width:any
-} 
+let gridApi: any;
+let columnApi: any;
+var selectedView:any;
 
 function AggridWrapper(props:AggridWrapperProps)  {
   
-  const {columnDefs,rowData,dashboardName} = props;
+  const {columnDefs,dashboardName,apiURL} = props;
   const [open, setOpen] = useState(false);
   const [colDefs,setColDefs] = useState<ColDef[]>([]);
+  const [rowData, setRowData] = useState([]);
 
   const handleDrawerOpen = () => {
         setOpen(true);
@@ -117,10 +102,61 @@ function AggridWrapper(props:AggridWrapperProps)  {
 
  },[columnDefs]);
 
+ function ServerSideDatasource() {
+    return {
+      getRows: async function (params:any) {
+        debugger;
+      fetch(apiURL)
+      .then((resp) => {
+        return resp.json();
+      })
+      .then((data:any) => {
+          var totalRows = -1;
+      
+          if (data.length < 50) {
+            totalRows = params.request.startRow + data.length;
+          }
+      
+          params.successCallback(data, totalRows);
+      });
+    }
+  }
+}
+
+ const userGridViewFunction = (view:any) => { 
+  selectedView = view;
+
+  setGridFilters();
+debugger;
+  var datasource = ServerSideDatasource();
+
+  gridApi.setServerSideDatasource(datasource);
+ }
+
+ const setGridFilters = () => {
+  if (selectedView !== null && selectedView !== undefined) {
+    try {
+      columnApi.applyColumnState({
+        state: JSON.parse(selectedView.columnData),
+
+        defaultState: { sort: null },
+      });
+
+      gridApi.setFilterModel(JSON.parse(selectedView.filterData));
+    } catch (ex) {
+      console.log(ex);
+    }
+  }
+}
+
+ const onGridReady = (params:any) => {
+  gridApi=params.api;
+  columnApi=params.columnApi;
+}
 
   return (
     <ClaimLandingContainer>
-        <CustomDrawer open={open} setOpen={setOpen} />
+        <CustomAgGridViews reload={false} open={open} setOpen={setOpen} gridApi={gridApi} columnApi={columnApi} userGridViewFunction={userGridViewFunction}  />
       <ClaimLandingToolbar>
           <Toolbuttons>
                   <IconButton name="new" title="New Claim" >
@@ -141,12 +177,15 @@ function AggridWrapper(props:AggridWrapperProps)  {
       <ClaimLandingHeader>
           <GridContainer className="ag-theme-alpine" style={{width:'1200px',height:'500px'}}>
               <AgGridReact
+                  onGridReady={onGridReady}
                   defaultColDef={defaultColDef}
                   columnDefs={colDefs}
-                  rowData={rowData}
                   pagination={true}
                   paginationPageSize={50}
                   columnTypes={columnTypes}
+                  rowModelType={"serverSide"}
+                  serverSideStoreType={"partial"}
+                  cacheBlockSize={50}
               >
               </AgGridReact>
               </GridContainer>
@@ -157,4 +196,4 @@ function AggridWrapper(props:AggridWrapperProps)  {
   );
 }
 
-export default AggridWrapper
+export default AggridWrapper;
