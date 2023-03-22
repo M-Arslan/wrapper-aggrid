@@ -30,24 +30,32 @@ export const drawerHeader = {
 
 export interface Props {
   open: boolean;
-  reload:boolean;
-  landingPage?:string;
+  reload: boolean;
+  landingPage?: string;
   setOpen: (v: boolean) => void;
-  gridApi:any;
-  columnApi:any;
-  userGridViewFunction:(v:any)=>void;
+  gridApi: any;
+  columnApi: any;
+  userGridViewFunction: (v: any) => void;
 }
 
 export const drawerStyle = {
-    width: drawerWidth,
-    flexShrink: 0,
-    listStyle: "none",
-    listStyleType: "none",
+  width: drawerWidth,
+  flexShrink: 0,
+  listStyle: "none",
+  listStyleType: "none",
 };
 
 export const loadUserGridViews = async () => {
-    const response = await fetch("https://mocki.io/v1/4a36a458-b06f-4abd-b0c0-eb2d1c40b6d3");
-    const data = await response.json();
-    return data;
-}
+  const response = await fetch(
+    "https://mocki.io/v1/18f9aa46-4700-4e95-b82b-9aad2143a9c1"
+  );
+  const data = await response.json();
+  return data;
+};
 
+export const selectControl = {
+  width: "300px",
+  margin: "0 auto",
+};
+
+export const heading = { fontSize: "15px", flexBasis: "33.33%", flexShrink: 0 };
