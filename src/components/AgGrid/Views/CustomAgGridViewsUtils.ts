@@ -35,7 +35,7 @@ export interface Props {
   setOpen: (v: boolean) => void;
   gridApi:any;
   columnApi:any;
-  userGridViewFunction:(v:any)=>void;
+  userGridViewFunction:(v:number,params:any)=>void;
 }
 
 export const drawerStyle = {
