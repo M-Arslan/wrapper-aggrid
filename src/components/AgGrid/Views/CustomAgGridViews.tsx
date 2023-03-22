@@ -17,14 +17,17 @@ import {
   List,
   ListItem,
   ListItemText,
-  MenuItem
+  MenuItem,
+  SelectChangeEvent,
 } from "@mui/material";
-import SelectList from './SelectList';
-import TextInput from './TextInput';
+import SelectList from "../../../common/SelectList";
+import TextInput from "../../../common/TextInput";
+import Switch from "../../../common/Switch";
 import {
   ChevronLeft,
   Delete as DeleteIcon,
   ExpandMore as ExpandMoreIcon,
+  Save as SaveIcon,
 } from "@mui/icons-material";
 import {
   ScrollPanel,
@@ -34,8 +37,9 @@ import {
   drawerWidth,
   drawerStyle,
   loadUserGridViews,
-  selectControl,
-  heading
+  selectControlStyles,
+  headingStyles,
+  btnMarginStyles,
 } from "./CustomAgGridViewsUtils";
 
 let selectedView = [];
@@ -65,25 +69,66 @@ export const CustomAgGridViews: React.FC<Props> = ({
   userGridViewFunction,
   columnApi,
 }) => {
-  const closeDrawer = () => {
-    setOpen(false);
-  };
-
+  const label = { inputProps: { "aria-label": "Switch demo" } };
   const [userViewData, setUserViewData] = React.useState<userViewDataObj>({
     userGridViews: [],
   });
-
   const [expanded, setExpanded] = React.useState("");
-
+  const [btnUpdateDisabled, setBtnUpdateDisabled] = React.useState(true);
+  const [btnDeleteDisabled, setBtnDeleteDisabled] = React.useState(true);
   const [metadata, setMetadata] = React.useState({
     viewName: "",
     setDefaultView: false,
     ddlSelectedView: "2D3D1954-D93A-4469-A534-08D7FDB0ECE0",
   });
 
-  const onViewChange = (event: any) => {}
+  const closeDrawer = () => {
+    setOpen(false);
+  };
 
-  const onDefaultCBChange = async (e) => {
+  const onViewChange = (e: SelectChangeEvent<unknown>) => {
+    //gridApi.showLoadingOverlay();
+
+    const { name, value } = e.target;
+    const val = value as string;
+
+    selectedView = userViewData.userGridViews.find(
+      (x) => x.userGridViewID === val
+    );
+
+    // loadClaimData();
+
+    if (typeof userGridViewFunction === "function") {
+      userGridViewFunction(1,selectedView);
+    }
+
+    gridApi.sizeColumnsToFit();
+    if (selectedView.isSystem) {
+      setMetadata({
+        ...metadata,
+        ddlSelectedView: val,
+        viewName: "",
+        setDefaultView: false,
+      });
+      setBtnUpdateDisabled(true);
+      setBtnDeleteDisabled(true);
+    } else {
+      setMetadata({
+        ...metadata,
+        ddlSelectedView: val,
+        viewName: selectedView.viewName,
+        setDefaultView: selectedView.isDefault,
+      });
+      setBtnUpdateDisabled(false);
+      setBtnDeleteDisabled(false);
+    }
+
+    // if (typeof handleDrawerClose === "function") {
+    //   handleDrawerClose();
+    // }
+  };
+
+  const onDefaultCBChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     setMetadata({
       ...metadata,
 
@@ -91,7 +136,7 @@ export const CustomAgGridViews: React.FC<Props> = ({
     });
   };
 
-  const handleInputChange = (evt:React.ChangeEvent<HTMLInputElement>) => {
+  const handleInputChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
     setMetadata({
       ...metadata,
 
@@ -160,7 +205,7 @@ export const CustomAgGridViews: React.FC<Props> = ({
     }
 
     if (typeof userGridViewFunction === "function") {
-      userGridViewFunction(selectedView);
+      userGridViewFunction(1, selectedView);
     }
   };
 
@@ -188,7 +233,7 @@ export const CustomAgGridViews: React.FC<Props> = ({
       });
     });
   }, [reload]);
-  console.log("userViewData.userGridViews",userViewData.userGridViews)
+  console.log("userViewData.userGridViews", userViewData.userGridViews);
   return (
     <ThemeProvider theme={theme}>
       <Drawer anchor="right" open={open} style={drawerStyle}>
@@ -209,11 +254,11 @@ export const CustomAgGridViews: React.FC<Props> = ({
                 aria-controls="panel1bh-content"
                 id="panel1bh-header"
               >
-                <Typography style={heading}>My Views</Typography>
+                <Typography style={headingStyles}>My Views</Typography>
               </ExpansionPanelSummary>
-              
-              <ExpansionPanelDetails style={{ display:"column" }}>
-                <FormControl style={selectControl}>
+
+              <ExpansionPanelDetails style={{ flexDirection: "column" }}>
+                <FormControl style={selectControlStyles}>
                   <SelectList
                     onChange={onViewChange}
                     label="Select View"
@@ -221,52 +266,127 @@ export const CustomAgGridViews: React.FC<Props> = ({
                     variant="outlined"
                     value={metadata?.ddlSelectedView || ""}
                   >
-                    {userViewData.userGridViews.filter((i:any) => !i.isSystem && i.screenName === landingPage)?.map((item:any)=>{
+                    {userViewData.userGridViews
+                      .filter(
+                        (i: any) => !i.isSystem && i.screenName === landingPage
+                      )
+                      ?.map((item: any) => {
                         return (
                           <MenuItem value={item.userGridViewID}>
                             {item.viewName}
                           </MenuItem>
                         );
-
-                    })
-                    }
+                      })}
                   </SelectList>
                 </FormControl>
-        </ExpansionPanelDetails>
+              </ExpansionPanelDetails>
 
-        <Divider />
+              <Divider />
 
-        <ExpansionPanelDetails style={{ display:"column" }}>
-          <FormGroup row>
-            <FormControl style={selectControl}>
-              <TextInput
-                id="view-name"
-                label="View Name"
-                variant="outlined"
-                value={metadata?.viewName || ""}
-                inputProps={{ maxLength: 50 }}
-                onChange={handleInputChange}
-              />
-            </FormControl>
-          </FormGroup>
+              <ExpansionPanelDetails style={{ flexDirection: "column" }}>
+                <FormGroup row>
+                  <FormControl>
+                    <TextInput
+                      id="view-name"
+                      label="View Name"
+                      variant="outlined"
+                      value={metadata?.viewName || ""}
+                      inputProps={{ maxLength: 50 }}
+                      onChange={handleInputChange}
+                    />
+                  </FormControl>
+                </FormGroup>
 
-          <FormGroup row>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  id="cbDefaultView"
-                  name="cbDefaultView"
+                <FormGroup row>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        {...label}
+                        id="cbDefaultView"
+                        name="cbDefaultView"
+                        checked={metadata?.setDefaultView}
+                        onChange={onDefaultCBChange}
+                      />
+                    }
+                    label="Set a default View"
+                  />
+                </FormGroup>
+              </ExpansionPanelDetails>
+
+              <ExpansionPanelActions>
+                <Button
+                  size="small"
+                  variant="contained"
+                  color="secondary"
+                  style={btnMarginStyles}
+                  disabled={btnDeleteDisabled}
+                  startIcon={<DeleteIcon />}
+                  // onClick={btnDeleteViewClick}
+                >
+                  Delete
+                </Button>
+
+                <Button
+                  variant="contained"
                   color="primary"
-                  checked={metadata?.setDefaultView}
-                  onChange={onDefaultCBChange}
-                />
-              }
-              label="Set as default View"
-            />
-          </FormGroup>
-        </ExpansionPanelDetails>
+                  style={btnMarginStyles}
+                  size="small"
+                  id="btnUpdateView"
+                  disabled={btnUpdateDisabled}
+                  startIcon={<SaveIcon />}
+                  // onClick={btnUpdateViewClick}
+                >
+                  Update
+                </Button>
 
+                <Button
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                  style={btnMarginStyles}
+                  startIcon={<SaveIcon />}
+                  // onClick={btnSaveViewClick}
+                >
+                  Create
+                </Button>
+              </ExpansionPanelActions>
 
+              <Divider />
+            </ExpansionPanel>
+
+            <ExpansionPanel
+              expanded={expanded === "panel2"}
+              onChange={() => setExpanded("panel2")}
+            >
+              <ExpansionPanelSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel2bh-content"
+                id="panel2bh-header"
+              >
+                <Typography style={headingStyles}>System Views</Typography>
+              </ExpansionPanelSummary>
+
+              <ExpansionPanelDetails style={{ flexDirection: "column" }}>
+                <FormControl style={selectControlStyles}>
+                  <SelectList
+                    onChange={onViewChange}
+                    label="Select System View"
+                    variant="outlined"
+                    id="ddlSelectedView"
+                    value={metadata?.ddlSelectedView || ""}
+                  >
+                    {userViewData.userGridViews.map((item) => {
+                      if (item.isSystem && item.screenName === landingPage) {
+                        return (
+                          <MenuItem value={item.userGridViewID}>
+                            {item.viewName}
+                          </MenuItem>
+                        );
+                      }
+                    })}
+                  </SelectList>
+                </FormControl>
+              </ExpansionPanelDetails>
             </ExpansionPanel>
           </InputPanel>
         </ScrollPanel>

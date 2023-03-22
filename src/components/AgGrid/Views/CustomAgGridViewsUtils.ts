@@ -47,15 +47,17 @@ export const drawerStyle = {
 
 export const loadUserGridViews = async () => {
   const response = await fetch(
-    "https://mocki.io/v1/18f9aa46-4700-4e95-b82b-9aad2143a9c1"
+    "https://mocki.io/v1/5136124a-f937-4c49-bbc5-72db22b9b0f8"
   );
   const data = await response.json();
   return data;
 };
 
-export const selectControl = {
+export const selectControlStyles = {
   width: "300px",
   margin: "0 auto",
 };
 
-export const heading = { fontSize: "15px", flexBasis: "33.33%", flexShrink: 0 };
+export const headingStyles = { fontSize: "15px", flexBasis: "33.33%", flexShrink: 0 };
+
+export const btnMarginStyles = {margin:"1em"};

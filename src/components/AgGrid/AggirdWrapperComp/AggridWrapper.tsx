@@ -115,18 +115,20 @@ function AggridWrapper(props:AggridWrapperProps)  {
  function ServerSideDatasource() {
     return {
       getRows: async function (params:any) {
-        debugger;
-      let searchDataObj = {
-        page:1,
-        pageSize:20
-      }
-      const data = await getGridViewsData(searchDataObj);
-      var totalRows = -1;
-      if (data.length < 50) {
-        totalRows = params.request.startRow + data.length;
-      }
-      params.successCallback(data, totalRows);
-
+      
+        fetch(apiURL)
+        .then((resp) => {
+          return resp.json();
+        })
+        .then((data:any) => {
+            var totalRows = -1;
+        
+            if (data.length < 50) {
+              totalRows = params.request.startRow + data.length;
+            }
+        
+            params.successCallback(data, totalRows);
+        });
     }
   }
 }
