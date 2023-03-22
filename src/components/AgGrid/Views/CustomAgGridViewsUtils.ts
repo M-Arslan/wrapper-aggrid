@@ -33,9 +33,9 @@ export interface Props {
   reload: boolean;
   landingPage?: string;
   setOpen: (v: boolean) => void;
-  gridApi: any;
-  columnApi: any;
-  userGridViewFunction: (v: any) => void;
+  gridApi:any;
+  columnApi:any;
+  userGridViewFunction:(v:number,params:any)=>void;
 }
 
 export const drawerStyle = {

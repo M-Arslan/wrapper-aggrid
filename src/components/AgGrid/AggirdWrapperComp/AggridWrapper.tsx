@@ -9,6 +9,7 @@ import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import {Menu} from "@mui/icons-material"
 import { CustomAgGridViews } from '../Views/CustomAgGridViews';
 import { AggridWrapperProps, ColumnsDefinitions } from './AggridWrapperUtils';
+import { loadUserGridViews } from '../Views/CustomAgGridViewsUtils';
 
 let gridApi: any;
 let columnApi: any;
@@ -16,7 +17,16 @@ var selectedView:any;
 
 function AggridWrapper(props:AggridWrapperProps)  {
   
-  const {columnDefs,dashboardName,apiURL} = props;
+  const {
+    columnDefs,
+    dashboardName,
+    apiURL,
+    getGridViewsData,
+    updateGridViewsData,
+    createGridViewsData,
+    deleteGridViewsData,
+    views
+  } = props;
   const [open, setOpen] = useState(false);
   const [colDefs,setColDefs] = useState<ColDef[]>([]);
   const [rowData, setRowData] = useState([]);
@@ -35,7 +45,7 @@ function AggridWrapper(props:AggridWrapperProps)  {
       tempColDefObj.id = x?.field;
       tempColDefObj.field = x?.field;
       tempColDefObj.name = x?.field;
-      tempColDefObj.filter = x.type.toLowerCase() === 'select' ? 'agSetColumnFilter': x.type;
+      tempColDefObj.filter = x.type?.toLowerCase() === 'select' ? 'agSetColumnFilter': x.type;
       tempColDefObj.filterParams = x.filterParams ? x.filterParams : null;
       tempColDefObj.width = x.width ? x.width : 200;
       return tempColDefObj;
@@ -106,31 +116,53 @@ function AggridWrapper(props:AggridWrapperProps)  {
     return {
       getRows: async function (params:any) {
         debugger;
-      fetch(apiURL)
-      .then((resp) => {
-        return resp.json();
-      })
-      .then((data:any) => {
-          var totalRows = -1;
-      
-          if (data.length < 50) {
-            totalRows = params.request.startRow + data.length;
-          }
-      
-          params.successCallback(data, totalRows);
-      });
+      let searchDataObj = {
+        page:1,
+        pageSize:20
+      }
+      const data = await getGridViewsData(searchDataObj);
+      var totalRows = -1;
+      if (data.length < 50) {
+        totalRows = params.request.startRow + data.length;
+      }
+      params.successCallback(data, totalRows);
+
     }
   }
 }
 
- const userGridViewFunction = (view:any) => { 
-  selectedView = view;
+ const userGridViewFunction = (actionType: number,view:any) => { 
+  
+   switch(actionType){
+    case 1:{
+      // loadGridData
+      selectedView = view;
+      setGridFilters();
+      var datasource = ServerSideDatasource();
+      gridApi.setServerSideDatasource(datasource);
+      return;
+    } 
+    case 2: {
+      //CreateView
+      createGridViewsData(view);
+      return; 
+    } 
+    case 3: {
+      //UpdateViews
+      if(typeof updateGridViewsData === 'function')
+        updateGridViewsData(view);
+      return;
+    } 
+    case 4: {
+      if(typeof deleteGridViewsData === 'function')
+        deleteGridViewsData(view);
+      return;
+    }
+  }
+ 
+   
 
-  setGridFilters();
-debugger;
-  var datasource = ServerSideDatasource();
 
-  gridApi.setServerSideDatasource(datasource);
  }
 
  const setGridFilters = () => {
