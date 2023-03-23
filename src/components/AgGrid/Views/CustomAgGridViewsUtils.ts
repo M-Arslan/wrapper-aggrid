@@ -59,6 +59,7 @@ export interface Props {
   gridApi:any;
   columnApi:any;
   userGridViewFunction:(v:number,params:any)=>void;
+  getGridViewsData: () => any[];
 }
 
 export interface ViewNameError {
