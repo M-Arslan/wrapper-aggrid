@@ -70,6 +70,7 @@ export const CustomAgGridViews: React.FC<Props> = ({
   gridApi,
   userGridViewFunction,
   columnApi,
+  getGridViewsData
 }) => {
   const label = { inputProps: { "aria-label": "Switch demo" } };
   const [userViewData, setUserViewData] = React.useState<userViewDataObj>({
@@ -383,7 +384,7 @@ export const CustomAgGridViews: React.FC<Props> = ({
   };
 
   const loaduserGridData = async () => {
-    let userGridViewData = await loadUserGridViews();
+    let userGridViewData = await getGridViewsData();
 
     let uGViews = userGridViewData;
     if (uGViews === null) {

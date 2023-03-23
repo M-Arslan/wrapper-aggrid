@@ -9,7 +9,6 @@ import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import {Menu} from "@mui/icons-material"
 import { CustomAgGridViews } from '../Views/CustomAgGridViews';
 import { AggridWrapperProps, ColumnsDefinitions } from './AggridWrapperUtils';
-import { loadUserGridViews } from '../Views/CustomAgGridViewsUtils';
 
 let gridApi: any;
 let columnApi: any;
@@ -20,11 +19,11 @@ function AggridWrapper(props:AggridWrapperProps)  {
   const {
     columnDefs,
     dashboardName,
-    apiURL,
     getGridViewsData,
     updateGridViewsData,
     createGridViewsData,
     deleteGridViewsData,
+    getGridRowsData,
     views
   } = props;
   const [open, setOpen] = useState(false);
@@ -115,19 +114,18 @@ function AggridWrapper(props:AggridWrapperProps)  {
     return {
       getRows: async function (params:any) {
       
-        fetch(apiURL)
-        .then((resp) => {
-          return resp.json();
-        })
-        .then((data:any) => {
+          getGridRowsData().then((data)=>{
             var totalRows = -1;
         
             if (data.length < 50) {
               totalRows = params.request.startRow + data.length;
             }
         
-            params.successCallback(data, totalRows);
-        });
+            params.successCallback(data, totalRows);           
+          }).catch((error)=>{
+            console.log(error);
+          });
+
     }
   }
 }
@@ -161,9 +159,6 @@ function AggridWrapper(props:AggridWrapperProps)  {
     }
   }
  
-   
-
-
  }
 
  const setGridFilters = () => {
@@ -189,7 +184,7 @@ function AggridWrapper(props:AggridWrapperProps)  {
 
   return (
     <ClaimLandingContainer>
-        <CustomAgGridViews reload={false} open={open} setOpen={setOpen} gridApi={gridApi} columnApi={columnApi} userGridViewFunction={userGridViewFunction}  />
+        <CustomAgGridViews getGridViewsData={getGridViewsData} reload={false} open={open} setOpen={setOpen} gridApi={gridApi} columnApi={columnApi} userGridViewFunction={userGridViewFunction}  />
       <ClaimLandingToolbar>
           <Toolbuttons>
                   <IconButton name="new" title="New Claim" >

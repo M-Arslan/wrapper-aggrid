@@ -8,12 +8,11 @@ export interface ColDefProp {
   export interface AggridWrapperProps {
       columnDefs: ColDefProp[];
       dashboardName: string;
-      apiURL: string;
-      getGridRowsData: (params : any) => any[],
-      getGridViewsData: (params : any) => any,
+      getGridRowsData: () => Promise<any>,
+      getGridViewsData: () => any[],
       createGridViewsData: (params : any) => any,
       updateGridViewsData:(params : any) => any,
-      deleteGridViewsData: (params : any) => any,
+      deleteGridViewsData: (params : any) => void,
       views: boolean
   }
     
