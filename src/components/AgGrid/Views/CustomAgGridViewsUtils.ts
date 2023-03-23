@@ -1,6 +1,12 @@
 import styled from "styled-components";
 
+// Styles
+
 export const drawerWidth = 400;
+
+export const ErrorPanel = styled.div`
+  padding:  10px;
+`;
 
 export const ScrollPanel = styled.div`
   height: calc(100% - 38px);
@@ -28,29 +34,11 @@ export const drawerHeader = {
   backgroundColor: "#bdc3c7",
 };
 
-export interface Props {
-  open: boolean;
-  reload: boolean;
-  landingPage?: string;
-  setOpen: (v: boolean) => void;
-  gridApi:any;
-  columnApi:any;
-  userGridViewFunction:(v:number,params:any)=>void;
-}
-
 export const drawerStyle = {
   width: drawerWidth,
   flexShrink: 0,
   listStyle: "none",
   listStyleType: "none",
-};
-
-export const loadUserGridViews = async () => {
-  const response = await fetch(
-    "https://mocki.io/v1/5136124a-f937-4c49-bbc5-72db22b9b0f8"
-  );
-  const data = await response.json();
-  return data;
 };
 
 export const selectControlStyles = {
@@ -61,3 +49,31 @@ export const selectControlStyles = {
 export const headingStyles = { fontSize: "15px", flexBasis: "33.33%", flexShrink: 0 };
 
 export const btnMarginStyles = {margin:"1em"};
+
+// Types, Helper Functions && Interfaces
+export interface Props {
+  open: boolean;
+  reload: boolean;
+  landingPage?: string;
+  setOpen: (v: boolean) => void;
+  gridApi:any;
+  columnApi:any;
+  userGridViewFunction:(v:number,params:any)=>void;
+}
+
+export interface ViewNameError {
+  error:boolean;
+  errorMessage:string;
+}
+
+export interface userViewDataObj {
+  userGridViews: any[];
+}
+
+export const loadUserGridViews = async () => {
+  const response = await fetch(
+    "https://mocki.io/v1/5136124a-f937-4c49-bbc5-72db22b9b0f8"
+  );
+  const data = await response.json();
+  return data;
+};

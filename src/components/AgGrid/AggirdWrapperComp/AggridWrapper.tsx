@@ -29,7 +29,6 @@ function AggridWrapper(props:AggridWrapperProps)  {
   } = props;
   const [open, setOpen] = useState(false);
   const [colDefs,setColDefs] = useState<ColDef[]>([]);
-  const [rowData, setRowData] = useState([]);
 
   const handleDrawerOpen = () => {
         setOpen(true);
