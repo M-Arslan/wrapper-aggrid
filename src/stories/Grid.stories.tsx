@@ -22,21 +22,41 @@ const getGridRowsData = () => {
   });
 }
 
-const createGridViewsData = (id:any) => {
-  console.log(id);
+const createGridViewsData = async (view:any) => {
+  const response = await fetch(
+    "http://localhost:8000/addViews",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(view),
+    }
+  );
+  const data = await response.json();
+  return data;
 }
 
-const deleteGridViewsData = (view:any) => {
-  console.log(view);
-}
-
-const updateGridViewsData = (view:any) => {
-  console.log(view);
+const updateGridViewsData = async () => { 
+  const response = await fetch(
+    "http://localhost:8000/updateView"
+  );
+  const data = await response.json();
+  return data;
 }
 
 const getGridViewsData = async () => {
   const response = await fetch(
-    "https://mocki.io/v1/5136124a-f937-4c49-bbc5-72db22b9b0f8"
+    "http://localhost:8000/getAllViews"
+  );
+  const data = await response.json();
+  debugger;
+  return data;
+}
+
+const deleteGridViewsData = async (id:any) => {
+  const response = await fetch(
+    `http://localhost:8000/${id}`, { method: 'DELETE' }
   );
   const data = await response.json();
   return data;
