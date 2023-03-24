@@ -350,7 +350,9 @@ export const CustomAgGridViews: React.FC<Props> = ({
         isSystem: false,
         columnData: columnData,
         filterData: filterData,
+        createdBy: "GRN\\saadShah", // change later
         createdDate: GetDateTime,
+        modifiedBy: "GRN\\saadShah", // change later
         modifiedDate: GetDateTime,
         screenName: screenName,
       };
@@ -365,7 +367,7 @@ export const CustomAgGridViews: React.FC<Props> = ({
     if (selectedView.isSystem) {
       setViewNameUpdateError({
         ...ViewNameUpdateError,
-        error: true,
+        error: true, 
         errorMessage: "You cannot delete a system view.",
       });
 
@@ -378,7 +380,7 @@ export const CustomAgGridViews: React.FC<Props> = ({
     });
 
     if (typeof userGridViewFunction === "function") {
-      userGridViewFunction(4, selectedView.userGridViewID);
+      userGridViewFunction(4, selectedView._id);
     }
     loaduserGridData();
   };

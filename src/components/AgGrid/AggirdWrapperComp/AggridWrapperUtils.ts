@@ -9,7 +9,7 @@ export interface ColDefProp {
       columnDefs: ColDefProp[];
       dashboardName: string;
       getGridRowsData: () => Promise<any>,
-      getGridViewsData: () => any[],
+      getGridViewsData: () => Promise<any>,
       createGridViewsData: (params : any) => any,
       updateGridViewsData:(params : any) => any,
       deleteGridViewsData: (params : any) => void,
