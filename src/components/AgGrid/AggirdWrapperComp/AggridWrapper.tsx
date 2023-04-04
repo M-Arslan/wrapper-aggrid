@@ -209,7 +209,7 @@ function AggridWrapper(props:AggridWrapperProps)  {
           </HeaderSwitchToolbar>
       </ClaimLandingToolbar>
       <ClaimLandingHeader>
-          <GridContainer className="ag-theme-alpine" style={{width:'100%',height:'50vh'}}>
+          <GridContainer className="ag-theme-alpine" style={{width:'100%',height:'100vh'}}>
               <AgGridReact
                   onGridReady={onGridReady}
                   defaultColDef={defaultColDef}

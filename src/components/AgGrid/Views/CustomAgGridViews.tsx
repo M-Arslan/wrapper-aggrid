@@ -219,9 +219,8 @@ export const CustomAgGridViews: React.FC<Props> = ({
     }
    debugger;
     if (typeof userGridViewFunction === "function") {
-      let flag = userGridViewFunction(1, selectedView);
-      if(flag)
-      loaduserGridData();
+      userGridViewFunction(1, selectedView);
+      
     }
   };
 
@@ -297,9 +296,10 @@ export const CustomAgGridViews: React.FC<Props> = ({
     };
 
     if (typeof userGridViewFunction === "function") {
-      userGridViewFunction(3, metadataObj);
+      let flag = userGridViewFunction(3, metadataObj);
+      if(flag)
+      loaduserGridData();
     }
-    loaduserGridData();
   };
 
   const btnSaveViewClick = async (event: any) => {
