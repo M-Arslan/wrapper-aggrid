@@ -9,7 +9,8 @@ import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import {Menu} from "@mui/icons-material"
 import { CustomAgGridViews } from '../Views/CustomAgGridViews';
 import { AggridWrapperProps, ColumnsDefinitions } from './AggridWrapperUtils';
-
+import { LicenseManager } from 'ag-grid-enterprise';
+LicenseManager.setLicenseKey("CompanyName=General Reinsurance Corporation,LicensedGroup=G2 Application Development,LicenseType=MultipleApplications,LicensedConcurrentDeveloperCount=20,LicensedProductionInstancesCount=2,AssetReference=AG-030926,SupportServicesEnd=17_June_2024_[v2]_MTcxODU3ODgwMDAwMA==ac579ee70580ad049a67c3ceb2f0d75e");
 let gridApi: any;
 let columnApi: any;
 var selectedView:any;
@@ -113,7 +114,7 @@ function AggridWrapper(props:AggridWrapperProps)  {
  function ServerSideDatasource() {
     return {
       getRows: async function (params:any) {
-      
+      debugger;
           getGridRowsData().then((data)=>{
             var totalRows = -1;
         
@@ -131,7 +132,7 @@ function AggridWrapper(props:AggridWrapperProps)  {
 }
 
  const userGridViewFunction = (actionType: number,view:any) => { 
-  
+  debugger;
    switch(actionType){
     case 1:{
       // loadGridData
@@ -139,24 +140,28 @@ function AggridWrapper(props:AggridWrapperProps)  {
       setGridFilters();
       var datasource = ServerSideDatasource();
       gridApi.setServerSideDatasource(datasource);
-      return;
+      return true;
     } 
     case 2: {
       //CreateView
-      createGridViewsData(view);
-      return; 
+      let flag = createGridViewsData(view);
+      return flag; 
     } 
     case 3: {
       //UpdateViews
-      if(typeof updateGridViewsData === 'function')
-        updateGridViewsData(view);
-      return;
+      if(typeof updateGridViewsData === 'function'){
+        let flag = updateGridViewsData(view);
+        return flag;
+      }
     } 
     case 4: {
-      if(typeof deleteGridViewsData === 'function')
-        deleteGridViewsData(view);
-      return;
+      if(typeof deleteGridViewsData === 'function'){
+        let flag = deleteGridViewsData(view);
+        return flag;
+      }
     }
+    default:
+      return true
   }
  
  }
@@ -178,6 +183,7 @@ function AggridWrapper(props:AggridWrapperProps)  {
 }
 
  const onGridReady = (params:any) => {
+  debugger;
   gridApi=params.api;
   columnApi=params.columnApi;
 }
@@ -203,7 +209,7 @@ function AggridWrapper(props:AggridWrapperProps)  {
           </HeaderSwitchToolbar>
       </ClaimLandingToolbar>
       <ClaimLandingHeader>
-          <GridContainer className="ag-theme-alpine" style={{width:'1200px',height:'500px'}}>
+          <GridContainer className="ag-theme-alpine" style={{width:'100%',height:'50vh'}}>
               <AgGridReact
                   onGridReady={onGridReady}
                   defaultColDef={defaultColDef}
@@ -219,7 +225,7 @@ function AggridWrapper(props:AggridWrapperProps)  {
               </GridContainer>
 
       </ClaimLandingHeader>
-  </ClaimLandingContainer >
+  </ClaimLandingContainer > 
   
   );
 }

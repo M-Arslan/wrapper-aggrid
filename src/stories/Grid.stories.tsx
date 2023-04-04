@@ -83,5 +83,4 @@ Primary.args = {
   deleteGridViewsData:deleteGridViewsData,
   updateGridViewsData:updateGridViewsData,
   getGridViewsData:getGridViewsData,
-  views:true
 };

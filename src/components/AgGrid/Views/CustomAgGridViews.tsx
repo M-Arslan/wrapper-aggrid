@@ -217,9 +217,11 @@ export const CustomAgGridViews: React.FC<Props> = ({
         setBtnDeleteDisabled(true);
       }
     }
-
+   debugger;
     if (typeof userGridViewFunction === "function") {
-      userGridViewFunction(1, selectedView);
+      let flag = userGridViewFunction(1, selectedView);
+      if(flag)
+      loaduserGridData();
     }
   };
 
@@ -350,16 +352,15 @@ export const CustomAgGridViews: React.FC<Props> = ({
         isSystem: false,
         columnData: columnData,
         filterData: filterData,
-        createdBy: "GRN\\saadShah", // change later
         createdDate: GetDateTime,
-        modifiedBy: "GRN\\saadShah", // change later
         modifiedDate: GetDateTime,
         screenName: screenName,
       };
       if (typeof userGridViewFunction === "function") {
-        userGridViewFunction(2, metadataObj);
+        let flag = userGridViewFunction(2, metadataObj);
+        if(flag)
+        loaduserGridData();
       }
-      loaduserGridData();
     }
   };
 
@@ -380,14 +381,16 @@ export const CustomAgGridViews: React.FC<Props> = ({
     });
 
     if (typeof userGridViewFunction === "function") {
-      userGridViewFunction(4, selectedView._id);
+     let flag = userGridViewFunction(4, selectedView._id);
+     if(flag)
+      loaduserGridData();
     }
-    loaduserGridData();
+    
   };
 
   const loaduserGridData = async () => {
     let userGridViewData = await getGridViewsData();
-
+  debugger;
     let uGViews = userGridViewData;
     if (uGViews === null) {
       uGViews = [];

@@ -1,6 +1,6 @@
 {
   "name": "wrapper-aggrid-genre",
-  "version": "1.0.4",
+  "version": "1.0.7",
   "description": "A common react typescript ag grid library",
   "scripts": {
     "rollup": "rollup -c --bundleConfigAsCjs",
@@ -8,7 +8,7 @@
     "build-storybook": "build-storybook"
   },
   "author": "hanasir",
-  "license": "ISC",
+  "license": "ISC", 
   "repository": {
     "type": "git",
     "url": "git+https://github.com/saadreact/commonreactggrid"

@@ -58,7 +58,7 @@ export interface Props {
   setOpen: (v: boolean) => void;
   gridApi:any;
   columnApi:any;
-  userGridViewFunction:(v:number,params:any)=>void;
+  userGridViewFunction:(v:number,params:any)=>boolean;
   getGridViewsData: () => Promise<any>;
 }
 
