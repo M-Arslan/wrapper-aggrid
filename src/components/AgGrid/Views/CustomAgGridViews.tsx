@@ -218,8 +218,7 @@ export const CustomAgGridViews: React.FC<Props> = ({
       }
     }
     if (typeof userGridViewFunction === "function") {
-      userGridViewFunction(1, selectedView);
-      
+      userGridViewFunction(1, selectedView);  
     }
   };
 
@@ -380,11 +379,10 @@ export const CustomAgGridViews: React.FC<Props> = ({
     });
 
     if (typeof userGridViewFunction === "function") {
-     let flag = userGridViewFunction(4, selectedView._id);
+     let flag = userGridViewFunction(4, selectedView.userGridViewID);
      if(flag)
       loaduserGridData();
     }
-    
   };
 
   const loaduserGridData = async () => {

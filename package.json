@@ -1,6 +1,6 @@
 {
   "name": "wrapper-aggrid-genre",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "A common react typescript ag grid library",
   "scripts": {
     "rollup": "rollup -c --bundleConfigAsCjs",
