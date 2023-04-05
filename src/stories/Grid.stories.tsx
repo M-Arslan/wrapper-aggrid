@@ -12,7 +12,7 @@ const Template: ComponentStory<typeof AggridWrapper> = (args) => (
   <AggridWrapper {...args} />
 );
 
-const getGridRowsData = () => {
+const getGridRowsData = (v:any) => {
   return fetch("https://www.ag-grid.com/example-assets/olympic-winners.json")
   .then((resp) => {
     return resp.json();
@@ -50,7 +50,6 @@ const getGridViewsData = async () => {
     "http://localhost:8000/getAllViews"
   );
   const data = await response.json();
-  debugger;
   return data;
 }
 
@@ -71,7 +70,7 @@ Primary.args = {
     {
       field: "testSelect",
       type: "select",
-      filterParams: { values: ["New", "Hello"], suppressAndOrCondition: true },
+      filterParams: { values: ["New", "Hello","test"], suppressAndOrCondition: true },
     },
     { field: "age", type: "number" },
     { field: "year", type: "number" },

@@ -8,7 +8,7 @@ import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import {Menu} from "@mui/icons-material"
 import { CustomAgGridViews } from '../Views/CustomAgGridViews';
-import { AggridWrapperProps, ColumnsDefinitions } from './AggridWrapperUtils';
+import { AggridWrapperProps, ColumnsDefinitions, getSortedColumns } from './AggridWrapperUtils';
 import { LicenseManager } from 'ag-grid-enterprise';
 LicenseManager.setLicenseKey("CompanyName=General Reinsurance Corporation,LicensedGroup=G2 Application Development,LicenseType=MultipleApplications,LicensedConcurrentDeveloperCount=20,LicensedProductionInstancesCount=2,AssetReference=AG-030926,SupportServicesEnd=17_June_2024_[v2]_MTcxODU3ODgwMDAwMA==ac579ee70580ad049a67c3ceb2f0d75e");
 let gridApi: any;
@@ -44,7 +44,7 @@ function AggridWrapper(props:AggridWrapperProps)  {
       tempColDefObj.id = x?.field;
       tempColDefObj.field = x?.field;
       tempColDefObj.name = x?.field;
-      tempColDefObj.filter = x.type?.toLowerCase() === 'select' ? 'agSetColumnFilter': x.type;
+      tempColDefObj.filter = x.type?.toLowerCase() === 'select' ? 'agSetColumnFilter': x.type?.toLowerCase() === 'text' ? 'agTextColumnFilter' : x.type?.toLowerCase() === 'date' ? 'agDateColumnFilter' : x.type?.toLowerCase() === 'number' ? 'agNumberColumnFilter' :  x.type;
       tempColDefObj.filterParams = x.filterParams ? x.filterParams : null;
       tempColDefObj.width = x.width ? x.width : 200;
       return tempColDefObj;
@@ -52,7 +52,6 @@ function AggridWrapper(props:AggridWrapperProps)  {
 
     setColDefs(colDefArray);
 }
-
 
  const defaultColDef = React.useMemo(() => {
   return {
@@ -66,6 +65,7 @@ function AggridWrapper(props:AggridWrapperProps)  {
     floatingFilter: true,
     // make columns resizable
     resizable: true,
+    sortable:true
     };
   }, []);
 
@@ -112,10 +112,42 @@ function AggridWrapper(props:AggridWrapperProps)  {
  },[columnDefs]);
 
  function ServerSideDatasource() {
-    return {
-      getRows: async function (params:any) {
-      debugger;
-          getGridRowsData().then((data)=>{
+   return {
+     getRows: async function (params:any) {
+
+        let filterModel = gridApi.getFilterModel();
+        let filterCount = Object.keys(filterModel).length;
+        let sortCount = getSortedColumns(columnApi).length;
+    
+        let searchDataObj:any = {
+          "pageNumber":params.request.endRow / 50,
+          "pageSize":50,
+        };
+
+        if(filterCount > 0 ) {
+          for (let [key, value] of Object.entries(filterModel) as any){
+            
+            if(value !== undefined && value !== null) {
+
+              if(value.filterType === 'set' && value.values.length > 0){
+                searchDataObj[key] = value.values;
+              }else if(value.filterType === 'text'){
+                searchDataObj[key] = value.filter;
+              }else if(value.filterType === 'date'){
+                searchDataObj[key] = new Date(value.dateFrom).toISOString();
+              }else if(value.filterType === 'number'){
+                searchDataObj[key] = value.filter;
+              } else return;
+            }
+          } 
+        }
+
+        if(sortCount > 0) {
+          let sortedColumns = getSortedColumns(columnApi)[0];
+          searchDataObj["orderBy"] = sortedColumns.colId + ' ' + sortedColumns.sort;
+        }
+
+          getGridRowsData(searchDataObj).then((data)=>{
             var totalRows = -1;
         
             if (data.length < 50) {
@@ -132,7 +164,6 @@ function AggridWrapper(props:AggridWrapperProps)  {
 }
 
  const userGridViewFunction = (actionType: number,view:any) => { 
-  debugger;
    switch(actionType){
     case 1:{
       // loadGridData
@@ -183,7 +214,6 @@ function AggridWrapper(props:AggridWrapperProps)  {
 }
 
  const onGridReady = (params:any) => {
-  debugger;
   gridApi=params.api;
   columnApi=params.columnApi;
 }
