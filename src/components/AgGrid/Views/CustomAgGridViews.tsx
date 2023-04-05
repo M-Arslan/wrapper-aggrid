@@ -217,7 +217,6 @@ export const CustomAgGridViews: React.FC<Props> = ({
         setBtnDeleteDisabled(true);
       }
     }
-   debugger;
     if (typeof userGridViewFunction === "function") {
       userGridViewFunction(1, selectedView);
       
@@ -390,7 +389,6 @@ export const CustomAgGridViews: React.FC<Props> = ({
 
   const loaduserGridData = async () => {
     let userGridViewData = await getGridViewsData();
-  debugger;
     let uGViews = userGridViewData;
     if (uGViews === null) {
       uGViews = [];
