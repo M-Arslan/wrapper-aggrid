@@ -66,7 +66,7 @@ export const CustomAgGridViews: React.FC<Props> = ({
   open,
   setOpen,
   reload = false,
-  landingPage = "ClaimsLandingPage",
+  landingPage,
   gridApi,
   userGridViewFunction,
   columnApi,

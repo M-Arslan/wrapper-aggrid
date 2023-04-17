@@ -37,7 +37,7 @@ const createGridViewsData = async (view:any) => {
   return data;
 }
 
-const updateGridViewsData = async () => { 
+const updateGridViewsData = async () => {  
   const response = await fetch(
     "http://localhost:8000/updateView"
   );

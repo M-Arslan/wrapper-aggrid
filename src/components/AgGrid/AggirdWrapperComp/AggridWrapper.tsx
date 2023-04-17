@@ -25,6 +25,7 @@ function AggridWrapper(props:AggridWrapperProps)  {
     createGridViewsData,
     deleteGridViewsData,
     getGridRowsData,
+    landingPage,
     views
   } = props;
   const [open, setOpen] = useState(false);
@@ -115,6 +116,7 @@ function AggridWrapper(props:AggridWrapperProps)  {
    return {
      getRows: async function (params:any) {
 
+        debugger;
         let filterModel = gridApi.getFilterModel();
         let filterCount = Object.keys(filterModel).length;
         let sortCount = getSortedColumns(columnApi).length;
@@ -124,30 +126,30 @@ function AggridWrapper(props:AggridWrapperProps)  {
           "pageSize":50,
         };
 
-        if(filterCount > 0 ) {
-          for (let [key, value] of Object.entries(filterModel) as any){
+        // if(filterCount > 0 ) {
+        //   for (let [key, value] of Object.entries(filterModel) as any){
             
-            if(value !== undefined && value !== null) {
+        //     if(value !== undefined && value !== null) {
 
-              if(value.filterType === 'set' && value.values.length > 0){
-                searchDataObj[key] = value.values;
-              }else if(value.filterType === 'text'){
-                searchDataObj[key] = value.filter;
-              }else if(value.filterType === 'date'){
-                searchDataObj[key] = new Date(value.dateFrom).toISOString();
-              }else if(value.filterType === 'number'){
-                searchDataObj[key] = value.filter;
-              } else return;
-            }
-          } 
-        }
+        //       if(value.filterType === 'set' && value.values.length > 0){
+        //         searchDataObj[key] = value.values;
+        //       }else if(value.filterType === 'text'){
+        //         searchDataObj[key] = value.filter;
+        //       }else if(value.filterType === 'date'){
+        //         searchDataObj[key] = new Date(value.dateFrom).toISOString();
+        //       }else if(value.filterType === 'number'){
+        //         searchDataObj[key] = value.filter;
+        //       } else return;
+        //     }
+        //   } 
+        // }
 
-        if(sortCount > 0) {
-          let sortedColumns = getSortedColumns(columnApi)[0];
-          searchDataObj["orderBy"] = sortedColumns.colId + ' ' + sortedColumns.sort;
-        }
+        // if(sortCount > 0) {
+        //   let sortedColumns = getSortedColumns(columnApi)[0];
+        //   searchDataObj["orderBy"] = sortedColumns.colId + ' ' + sortedColumns.sort;
+        // }
 
-          getGridRowsData(searchDataObj).then((data)=>{
+          getGridRowsData(searchDataObj,filterModel).then((data)=>{
             var totalRows = -1;
         
             if (data.length < 50) {
@@ -220,7 +222,7 @@ function AggridWrapper(props:AggridWrapperProps)  {
 
   return (
     <ClaimLandingContainer>
-        <CustomAgGridViews getGridViewsData={getGridViewsData} reload={false} open={open} setOpen={setOpen} gridApi={gridApi} columnApi={columnApi} userGridViewFunction={userGridViewFunction}  />
+        <CustomAgGridViews getGridViewsData={getGridViewsData} reload={false} open={open} landingPage={landingPage} setOpen={setOpen} gridApi={gridApi} columnApi={columnApi} userGridViewFunction={userGridViewFunction}  />
       <ClaimLandingToolbar>
           <Toolbuttons>
                   <IconButton name="new" title="New Claim" >
