@@ -18,3 +18,35 @@ If you want to learn more about creating good readme files then refer the follow
 - [ASP.NET Core](https://github.com/aspnet/Home)
 - [Visual Studio Code](https://github.com/Microsoft/vscode)
 - [Chakra Core](https://github.com/Microsoft/ChakraCore)
+
+
+
+```jsx
+import { SnackbarProvider, enqueueSnackbar } from 'notistack';
+
+const App = () => {
+  return (
+    <div>
+      <SnackbarProvider />
+      <button onClick={() => enqueueSnackbar('That was easy!')}>Show snackbar</button>
+    </div>
+  );
+};
+```
+
+Alternatively, You can use `useSnackbar` hook to display Snackbars. Just remember to wrap your app inside of a `SnackbarProvider` to have access to the hook context:
+
+```jsx
+import { SnackbarProvider, useSnackbar } from 'notistack';
+
+// wrap your app
+<SnackbarProvider>
+  <App />
+  <MyButton />
+</SnackbarProvider>
+
+const MyButton = () => {
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  return <Button onClick={() => enqueueSnackbar('I love hooks')}>Show snackbar</Button>;
+};
+```
