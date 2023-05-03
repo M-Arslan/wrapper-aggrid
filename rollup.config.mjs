@@ -21,29 +21,38 @@ export default [
         file: packageJson.main,
         format: "cjs",
         sourcemap: true,
+        exports: "named",
       },
       {
         file: packageJson.module,
         format: "esm",
         sourcemap: true,
+        exports: "named",
       },
     ],
     plugins: [
       peerDepsExternal(),
       resolve(),
       commonjs(),
-      typescript({ tsconfig: "./tsconfig.json", exclude:["**/__stories__", "**/*.stories.tsx"] }),
+      typescript({
+        tsconfig: "./tsconfig.json",
+        exclude: ["**/__stories__", "**/*.stories.tsx"],
+      }),
       postcss(),
-      
       terser(),
       image(),
+    ],
+    external: [
+      ...Object.keys(packageJson.dependencies || {}),
+      ...Object.keys(packageJson.peerDependencies || {}),
+      "react",
+      "react-dom",
     ],
   },
   {
     input: "dist/esm/types/index.d.ts",
     output: [{ file: "dist/index.d.ts", format: "esm" }],
     plugins: [dts.default()],
-
-    external: [/\.css$/], // telling rollup anything that is .css aren't part of type exports 
+    external: [/\.css$/],
   },
-]
+];
